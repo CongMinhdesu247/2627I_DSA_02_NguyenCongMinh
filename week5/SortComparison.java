@@ -3,7 +3,6 @@ import java.util.Random;
 
 public class SortComparison {
 
-    // 1. Thuật toán Insertion Sort - Độ phức tạp: O(N^2)
     public static void insertionSort(int[] arr) {
         int n = arr.length;
         for (int i = 1; i < n; i++) {
@@ -17,7 +16,6 @@ public class SortComparison {
         }
     }
 
-    // 2. Thuật toán Natural Merge Sort (Merge Sort Tự Nhiên)
     public static void naturalMergeSort(int[] arr) {
         if (arr == null || arr.length <= 1) return;
         int n = arr.length;
@@ -28,37 +26,30 @@ public class SortComparison {
             int numMerges = 0;
 
             while (left < n) {
-                // Xác định dãy con đã sắp xếp 1 (Run 1)
                 int mid = left;
                 while (mid + 1 < n && arr[mid] <= arr[mid + 1]) {
                     mid++;
                 }
 
-                // Nếu Run 1 phủ toàn bộ mảng ngay từ chỉ số 0, mảng đã hoàn toàn được sắp xếp
                 if (left == 0 && mid == n - 1) {
                     return;
                 }
 
-                // Nếu Run 1 chạm đến cuối mảng, không còn Run 2 để gộp trong lượt này
                 if (mid == n - 1) {
                     break;
                 }
 
-                // Xác định dãy con đã sắp xếp 2 (Run 2)
                 int right = mid + 1;
                 while (right + 1 < n && arr[right] <= arr[right + 1]) {
                     right++;
                 }
 
-                // Trộn Run 1 [left..mid] và Run 2 [mid+1..right]
                 merge(arr, temp, left, mid, right);
                 numMerges++;
 
-                // Chuyển sang tìm cặp Run tiếp theo
                 left = right + 1;
             }
 
-            // Nếu không có lượt gộp nào được thực hiện trong cả vòng quét, kết thúc
             if (numMerges == 0) {
                 break;
             }
@@ -87,7 +78,6 @@ public class SortComparison {
         }
     }
 
-    // --- Các hàm sinh dữ liệu thử nghiệm ---
 
     public static int[] generateRandom(int size) {
         Random rand = new Random(42);
@@ -117,7 +107,7 @@ public class SortComparison {
     public static int[] generateNearlySorted(int size) {
         int[] arr = generateSorted(size);
         Random rand = new Random(42);
-        int swaps = Math.max(1, size / 100); // Tráo đổi 1% phần tử
+        int swaps = Math.max(1, size / 100);
         for (int i = 0; i < swaps; i++) {
             int idx1 = rand.nextInt(size);
             int idx2 = rand.nextInt(size);
@@ -128,7 +118,6 @@ public class SortComparison {
         return arr;
     }
 
-    // --- Hàm thực thi chính ---
     public static void main(String[] args) {
         int[] sizes = {1000, 10000, 50000, 100000};
         String[] dataTypeNames = {
@@ -138,7 +127,6 @@ public class SortComparison {
             "Gần như đã sắp xếp"
         };
 
-        // Khởi động JVM (Warm-up) để phép đo chính xác hơn
         int[] warmup = generateRandom(2000);
         insertionSort(warmup.clone());
         naturalMergeSort(warmup.clone());
@@ -158,14 +146,12 @@ public class SortComparison {
                     default: original = new int[0];
                 }
 
-                // Đo thời gian Insertion Sort
                 int[] arr1 = original.clone();
                 long start1 = System.nanoTime();
                 insertionSort(arr1);
                 long end1 = System.nanoTime();
                 double timeInsertionMs = (end1 - start1) / 1e6;
 
-                // Đo thời gian Natural Merge Sort
                 int[] arr2 = original.clone();
                 long start2 = System.nanoTime();
                 naturalMergeSort(arr2);
